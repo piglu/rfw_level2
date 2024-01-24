@@ -13,11 +13,13 @@ Library             RPA.PDF
 Library             RPA.Archive
 Library             OperatingSystem
 Library             RPA.FileSystem
+Library             RPA.Assistant
 
 
 *** Tasks ***
 Order robots from RobotSpareBin Industries Inc
-    Open the robot order website
+    User input task
+    # Open the robot order website
     Download CSV file
     Process all orders
     Create ZIP package from PDF files
@@ -26,7 +28,9 @@ Order robots from RobotSpareBin Industries Inc
 
 *** Keywords ***
 Open the robot order website
-    Open Available Browser    https://robotsparebinindustries.com/#/robot-order
+    # https://robotsparebinindustries.com/#/robot-order
+    [Arguments]    ${url}
+    Open Available Browser    ${url}
     Maximize Browser Window
 
 Download CSV file
@@ -95,3 +99,13 @@ Create ZIP package from PDF files
 
 Close the browser
     Close Browser
+
+User input task
+    Add Heading    Input from User
+    Add Text Input    text_input    Please enter URL
+    Add Submit Buttons    buttons=Submit,Cancel    default=Submit
+    ${result}=    Run Dialog
+
+    ${url}=    Set Variable    ${result}[text_input]
+    Log To Console    ${url}
+    Open the robot order website    ${url}
